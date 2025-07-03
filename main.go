@@ -3,8 +3,8 @@ package main
 import "fmt"
 
 func main() {
-	const UE = 0.85
-	const UR = 78.6
-	ER := (1 / UE) * UR
-	fmt.Print(ER)
+	const UsdToEur = 0.85
+	const UsdToRub = 78.6
+	EurToRub := UsdToRub / UsdToEur
+	fmt.Print(EurToRub)
 }
