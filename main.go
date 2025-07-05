@@ -10,14 +10,11 @@ func main() {
 	EurToRub := UsdToRub / UsdToEur
 	fmt.Print(EurToRub)
 }
-func getUserInput() (string, string) {
-	var orgValue string
-	var tarValue string
-	fmt.Scan(&orgValue)
-	fmt.Scan(&tarValue)
-	return orgValue, tarValue
+func getUserInput() int {
+	var sum int
+	fmt.Scan(&sum)
+	return sum
 }
 
-func convertate(orgValue string, tarValue string, sum int) int {
-	return 0
+func convertate(sum int, orgValue string, tarValue string) int {
 }
