@@ -17,4 +17,5 @@ func getUserInput() int {
 }
 
 func convertate(sum int, orgValue string, tarValue string) int {
+	return 0
 }
