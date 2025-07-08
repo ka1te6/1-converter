@@ -9,17 +9,23 @@ const UsdToEur = 0.85
 const UsdToRub = 78.6
 
 func main() {
-	fmt.Println("-Конвертер валют-")
-	sum, orgValue, tarValue, err := getUserInput()
-	if err != nil {
-		fmt.Println(err)
+	for {
+		fmt.Println("-Конвертер валют-")
+		sum, orgValue, tarValue, err := getUserInput()
+		if err != nil {
+			fmt.Println(err)
+			continue
+		}
+		result := converter(sum, orgValue, tarValue)
+		fmt.Printf("Итоговый результат перевода валют: %.2f %s", result, tarValue)
+		var userAns string
+		fmt.Println("Повторить запрос(y/n) ")
+		fmt.Scan(&userAns)
+		ans := checkAns(userAns)
+		if !ans {
+			break
+		}
 	}
-	result := converter(sum, orgValue, tarValue)
-	fmt.Printf("Итоговый результат перевода валют %.2f", result)
-	var userAns string
-	fmt.Println("Повторить запрос(y/n)")
-	fmt.Scan(&userAns)
-
 }
 func getUserInput() (float64, string, string, error) {
 	var orgValue string
@@ -27,10 +33,13 @@ func getUserInput() (float64, string, string, error) {
 	var sum float64
 	fmt.Print("Введите исходную валюту(usd/eur/rub): ")
 	fmt.Scan(&orgValue)
-	if orgValue != "usd" || orgValue != "eur" || orgValue != "rub" {
+	if orgValue != "usd" && orgValue != "eur" && orgValue != "rub" {
 		return 0, "", "", errors.New("вы ввели не ту валюту, повторите попытку")
 	}
-	checkInput(orgValue)
+	tarValue, err := checkInput(orgValue)
+	if err != nil {
+		return 0, "", "", nil
+	}
 	fmt.Print("Введите сумму перевода: ")
 	fmt.Scan(&sum)
 	if sum <= 0 {
@@ -39,31 +48,31 @@ func getUserInput() (float64, string, string, error) {
 	return sum, orgValue, tarValue, nil
 }
 
-func checkInput(orgValue string) (string, string, error) {
+func checkInput(orgValue string) (string, error) {
 	var tarValue string
 	switch {
 	case "usd" == orgValue:
 		fmt.Print("Введите целевую валюту (eur/rub): ")
 		fmt.Scan(&tarValue)
-		if "eur" != tarValue || "rub" != tarValue {
-			return "", "", errors.New("вы ввели не ту валюту, повторите попытку")
+		if "eur" != tarValue && "rub" != tarValue {
+			return "", errors.New("вы ввели не ту валюту, повторите попытку")
 		}
 	case "eur" == orgValue:
 		fmt.Print("Введите целевую валюту (usd/rub): ")
 		fmt.Scan(&tarValue)
-		if "usd" != tarValue || "rub" != tarValue {
-			return "", "", errors.New("вы ввели не ту валюту, повторите попытку")
+		if "usd" != tarValue && "rub" != tarValue {
+			return "", errors.New("вы ввели не ту валюту, повторите попытку")
 		}
 	case "rub" == orgValue:
 		fmt.Print("Введите целевую валюту (usd/eur): ")
 		fmt.Scan(&tarValue)
-		if "usd" != tarValue || "eur" != tarValue {
-			return "", "", errors.New("вы ввели не ту валюту, повторите попытку")
+		if "usd" != tarValue && "eur" != tarValue {
+			return "", errors.New("вы ввели не ту валюту, повторите попытку")
 		}
 	default:
-		return orgValue, tarValue, nil
+		return tarValue, nil
 	}
-	return orgValue, tarValue, nil
+	return tarValue, nil
 }
 
 func converter(sum float64, orgValue string, tarValue string) float64 {
@@ -85,8 +94,7 @@ func converter(sum float64, orgValue string, tarValue string) float64 {
 	}
 }
 
-func checkAns(string) bool {
-	var ans string
+func checkAns(ans string) bool {
 	if ans == "y" || ans == "Y" {
 		return true
 	} else {
