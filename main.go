@@ -36,19 +36,27 @@ func getUserInput() (float64, string, string, error) {
 	if orgValue != "usd" && orgValue != "eur" && orgValue != "rub" {
 		return 0, "", "", errors.New("вы ввели не ту валюту, повторите попытку")
 	}
-	tarValue, err := checkInput(orgValue)
+	tarValue, err := checkInputValue(orgValue)
 	if err != nil {
-		return 0, "", "", nil
+		return 0, "", "", err
 	}
 	fmt.Print("Введите сумму перевода: ")
 	fmt.Scan(&sum)
-	if sum <= 0 {
-		return 0, "", "", errors.New("Неправильная сумма ввода")
+	sum, err = checkInputSum(sum)
+	if err != nil {
+		return 0, "", "", err
 	}
 	return sum, orgValue, tarValue, nil
 }
 
-func checkInput(orgValue string) (string, error) {
+func checkInputSum(sum float64) (float64, error) {
+	if sum <= 0 {
+		return 0, errors.New("Неправильная сумма ввода")
+	}
+	return sum, nil
+}
+
+func checkInputValue(orgValue string) (string, error) {
 	var tarValue string
 	switch {
 	case "usd" == orgValue:
