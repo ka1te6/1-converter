@@ -11,9 +11,19 @@ const UsdToRub = 78.6
 func main() {
 	for {
 		fmt.Println("-Конвертер валют-")
-		sum, orgValue, tarValue, err := getUserInput()
+		orgValue, err := getUserOValue()
 		if err != nil {
 			fmt.Println(err)
+			continue
+		}
+		sum, erro := getUserSum()
+		if erro != nil {
+			fmt.Println(erro)
+			continue
+		}
+		tarValue, errr := checkInputValue(orgValue)
+		if errr != nil {
+			fmt.Println(errr)
 			continue
 		}
 		result := converter(sum, orgValue, tarValue)
@@ -27,29 +37,21 @@ func main() {
 		}
 	}
 }
-func getUserInput() (float64, string, string, error) {
+
+func getUserOValue() (string, error) {
 	var orgValue string
-	var tarValue string
-	var sum float64
 	fmt.Print("Введите исходную валюту(usd/eur/rub): ")
 	fmt.Scan(&orgValue)
 	if orgValue != "usd" && orgValue != "eur" && orgValue != "rub" {
-		return 0, "", "", errors.New("вы ввели не ту валюту, повторите попытку")
+		return "", errors.New("вы ввели не ту валюту, повторите попытку")
 	}
-	tarValue, err := checkInputValue(orgValue)
-	if err != nil {
-		return 0, "", "", err
-	}
-	fmt.Print("Введите сумму перевода: ")
-	fmt.Scan(&sum)
-	sum, err = checkInputSum(sum)
-	if err != nil {
-		return 0, "", "", err
-	}
-	return sum, orgValue, tarValue, nil
+	return orgValue, nil
 }
 
-func checkInputSum(sum float64) (float64, error) {
+func getUserSum() (float64, error) {
+	var sum float64
+	fmt.Print("Введите сумму перевода: ")
+	fmt.Scan(&sum)
 	if sum <= 0 {
 		return 0, errors.New("Неправильная сумма ввода")
 	}
