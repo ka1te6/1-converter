@@ -11,20 +11,38 @@ const UsdToRub = 78.6
 func main() {
 	for {
 		fmt.Println("-Конвертер валют-")
-		orgValue, err := getUserOValue()
-		if err != nil {
-			fmt.Println(err)
-			continue
+		var orgValue string
+		var err error
+		var tarValue string
+		var errr error
+		var sum float64
+		var erro error
+		for {
+			orgValue, err = getUserOValue()
+			if err != nil {
+				fmt.Println(err)
+				continue
+			} else {
+				break
+			}
 		}
-		sum, erro := getUserSum()
-		if erro != nil {
-			fmt.Println(erro)
-			continue
+		for {
+			sum, errr = getUserSum()
+			if errr != nil {
+				fmt.Println(errr)
+				continue
+			} else {
+				break
+			}
 		}
-		tarValue, errr := checkInputValue(orgValue)
-		if errr != nil {
-			fmt.Println(errr)
-			continue
+		for {
+			tarValue, erro = checkInputValue(orgValue)
+			if erro != nil {
+				fmt.Println(erro)
+				continue
+			} else {
+				break
+			}
 		}
 		result := converter(sum, orgValue, tarValue)
 		fmt.Printf("Итоговый результат перевода валют: %.2f %s", result, tarValue)
